@@ -125,6 +125,7 @@ class SolCast(Forecast):
         return(retVal)
 
     def getSolCast(self):
+        invertermax    = self.config['SolCast'].getfloat('InverterMax')                  # Inverter capacity in kW
         if (self._doDownload()):
             hours   = self.config['SolCast'].getint('Hours', 168)                          # requires update of pysolcast
             hasData = False
@@ -165,6 +166,7 @@ class SolCast(Forecast):
                     df              = pd.merge(df, df_2, on='period_end', how='inner')
                     for c in cols:
                         df[c]       = df[c + '_1'] + df[c + '_2']
+                        df.loc[df[str(c)] > invertermax, str(c)] = invertermax
                 df.index.name       = 'PeriodEnd'
                 self.DataTable      = df*1000                                                # convert kW to W
                 issueTime           = (self.DataTable.index[0] - period).to_pydatetime()
