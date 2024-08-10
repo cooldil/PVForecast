@@ -61,7 +61,7 @@ class SolCast(Forecast):
             self._apiCalls = floor(self._apiCalls/2)
         if self._force:
             print("Warning --- Solcast download forced!!! Note limits in number of downloads/day!")
-        self.SQLTable      = 'solcast'
+        self.SQLTable      = 'forecast'
         self.postDict      = None                                                        # dictionary to post to solcat
 
     def _doDownload(self):
@@ -153,12 +153,14 @@ class SolCast(Forecast):
                 df                  = df.set_index('period_end')
                 period              = df['period'].iloc[0]
                 df.drop('period', axis=1, inplace=True)
+                df                  = df.rename(columns={"pv_estimate": "power", "pv_estimate10": "power10", "pv_estimate90": "power90"})
                 if self._site_2 is not None:
                     cols            = list(df)
                     df.columns      = [str(c) + '_1' for c in cols]
                     df_2            = pd.DataFrame(forecasts_2['forecasts'])
                     df_2            = df_2.set_index('period_end')
                     df_2.drop('period', axis=1, inplace=True)
+                    df_2            = df_2.rename(columns={"pv_estimate": "power", "pv_estimate10": "power10", "pv_estimate90": "power90"})
                     df_2.columns    = [str(c) + '_2' for c in cols]
                     df              = pd.merge(df, df_2, on='period_end', how='inner')
                     for c in cols:
