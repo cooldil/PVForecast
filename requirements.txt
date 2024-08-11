@@ -3,7 +3,7 @@
 #    older versions of other libraries are known to create problems
 requests
 pyyaml
-astral
+astral==2.2
 beautifulsoup4>=4.11.0
 elementpath>=2.1.0
 pysolcast>=1.0.12
