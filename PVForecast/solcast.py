@@ -61,7 +61,8 @@ class SolCast(Forecast):
             self._apiCalls = floor(self._apiCalls/2)
         if self._force:
             print("Warning --- Solcast download forced!!! Note limits in number of downloads/day!")
-        self.SQLTable      = 'forecast'
+        #self.SQLTable      = 'forecast'
+        self.SQLTable      = self.config['SolCast'].get('measurement_name', 'solcast')
         self.postDict      = None                                                        # dictionary to post to solcat
 
     def _doDownload(self):
